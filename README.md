@@ -58,6 +58,8 @@ Menu staples (House Drip, Oak Latte, Nitro Cold Brew, etc.) are defined in `Coff
 
 ```bash
 make              # build IdleCoffeeShopEditor (Development)
+make play         # build, then launch the game window
+make run          # launch game only (no rebuild)
 make game         # build game target
 make shipping     # editor Shipping
 make open         # launch Unreal Editor with this project
@@ -65,6 +67,8 @@ make clean        # remove Binaries/ Intermediate/
 make clean-all    # also Saved/ DerivedDataCache/
 make help
 ```
+
+In-game: **WASD** move, **mouse** look, **U** upgrade stations, **I** status log, **Esc** quit.
 
 Overrides:
 

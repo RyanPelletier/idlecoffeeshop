@@ -19,10 +19,11 @@ ACoffeeStation::ACoffeeStation()
 		StationMesh->SetStaticMesh(CubeMesh.Object);
 	}
 
-	StationMesh->SetSimulatePhysics(true);
+	// Station sits on the bar by default; enable physics later for knock-around demos.
+	StationMesh->SetSimulatePhysics(false);
 	StationMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	StationMesh->SetCollisionObjectType(ECC_PhysicsBody);
-	StationMesh->SetWorldScale3D(FVector(0.8f, 1.2f, 0.6f));
+	StationMesh->SetWorldScale3D(FVector(0.55f, 0.7f, 0.45f));
 }
 
 void ACoffeeStation::BeginPlay()
