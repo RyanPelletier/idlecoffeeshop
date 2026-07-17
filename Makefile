@@ -1,14 +1,11 @@
 # IdleCoffeeShop — Unreal Engine 5.5 (macOS)
 #
 # Usage:
-#   make            # build editor module (Development)
-#   make build      # same
-#   make game       # build game target
-#   make shipping   # build editor Shipping
-#   make open       # open project in Unreal Editor
-#   make clean      # remove Binaries/ Intermediate/
-#   make clean-all  # also Saved/ DerivedDataCache/
-#   make help
+#   make / make build
+#   make play | make run
+#   make showobj coffee_mug
+#   make list-objects
+#   make open | make clean | make help
 
 PROJECT_ROOT := $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
 UPROJECT     := $(PROJECT_ROOT)/IdleCoffeeShop.uproject
@@ -26,7 +23,10 @@ RES_Y        ?= 900
 EDITOR_TARGET := IdleCoffeeShopEditor
 GAME_TARGET   := IdleCoffeeShop
 
-.PHONY: all build game shipping open play run clean clean-all help check-engine
+# make showobj coffee_mug  → SHOWOBJ_NAME=coffee_mug
+SHOWOBJ_NAME := $(word 2,$(MAKECMDGOALS))
+
+.PHONY: all build game shipping open play run showobj list-objects clean clean-all help check-engine
 
 all: build
 
@@ -84,6 +84,31 @@ run: check-engine
 	"$(EDITOR_BIN)" "$(UPROJECT)" -game -windowed -ResX=$(RES_X) -ResY=$(RES_Y) \
 		-nosplash -log -stdout -FullStdOutLogOutput
 
+## Show & interact with one catalog object: make showobj coffee_mug
+showobj: check-engine
+	@if [ -z "$(SHOWOBJ_NAME)" ]; then \
+		echo "Usage: make showobj <object_id>"; \
+		echo ""; \
+		"$(PROJECT_ROOT)/Scripts/list-objects.sh"; \
+		exit 1; \
+	fi
+	@echo "==> Building then showing object: $(SHOWOBJ_NAME)"
+	@$(MAKE) build
+	@chmod +x "$(PROJECT_ROOT)/Scripts/showobj.sh" "$(PROJECT_ROOT)/Scripts/list-objects.sh"
+	@RES_X=$(RES_X) RES_Y=$(RES_Y) UE_ROOT="$(UE_ROOT)" \
+		"$(PROJECT_ROOT)/Scripts/showobj.sh" "$(SHOWOBJ_NAME)"
+
+## List all object catalog ids
+list-objects:
+	@chmod +x "$(PROJECT_ROOT)/Scripts/list-objects.sh"
+	@"$(PROJECT_ROOT)/Scripts/list-objects.sh"
+
+## Absorb extra words after showobj (e.g. coffee_mug) so make doesn't error
+ifneq ($(SHOWOBJ_NAME),)
+$(SHOWOBJ_NAME):
+	@:
+endif
+
 ## Remove compile outputs
 clean:
 	@echo "==> Cleaning Binaries/ Intermediate/"
@@ -99,17 +124,23 @@ clean-all: clean
 help:
 	@echo "IdleCoffeeShop make targets"
 	@echo ""
-	@echo "  make / make build   Build IdleCoffeeShopEditor (Development)"
-	@echo "  make game           Build IdleCoffeeShop game target"
-	@echo "  make shipping       Build editor Shipping"
-	@echo "  make open           Launch Unreal Editor with this project"
-	@echo "  make play           Build, then launch the game window"
-	@echo "  make run            Launch game only (no rebuild)"
-	@echo "  make clean          Remove Binaries/ Intermediate/"
-	@echo "  make clean-all      Also remove Saved/ DerivedDataCache/"
-	@echo "  make help           Show this help"
+	@echo "  make / make build       Build IdleCoffeeShopEditor (Development)"
+	@echo "  make game               Build IdleCoffeeShop game target"
+	@echo "  make shipping           Build editor Shipping"
+	@echo "  make open               Launch Unreal Editor with this project"
+	@echo "  make play               Build, then launch the full game"
+	@echo "  make run                Launch full game only (no rebuild)"
+	@echo "  make showobj <id>       Build + open interactive object showroom"
+	@echo "  make list-objects       Print all catalog object ids"
+	@echo "  make clean              Remove Binaries/ Intermediate/"
+	@echo "  make clean-all          Also remove Saved/ DerivedDataCache/"
+	@echo "  make help               Show this help"
 	@echo ""
-	@echo "Overrides:"
-	@echo "  UE_ROOT=$(UE_ROOT)"
-	@echo "  CONFIG=$(CONFIG)   PLATFORM=$(PLATFORM)"
-	@echo "  e.g. make build CONFIG=DebugGame"
+	@echo "Object showroom examples:"
+	@echo "  make showobj coffee_mug"
+	@echo "  make showobj milk_jug"
+	@echo "  make showobj espresso_machine"
+	@echo ""
+	@echo "Showroom controls: LMB grab | E interact | R reset | F info | WASD+mouse"
+	@echo ""
+	@echo "Overrides: UE_ROOT=... CONFIG=... PLATFORM=... RES_X=... RES_Y=..."

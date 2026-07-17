@@ -37,10 +37,41 @@ Source/IdleCoffeeShop/  # C++ game module
   CoffeeShopManager.*           # Cash, reputation, upgrades, idle income
   CoffeeStation.*               # Physics mesh + auto drink prep
   CoffeeShopPlayerController.*  # U = upgrade, I = status log
-Makefile                # make build / open / clean
-Scripts/build.sh        # Optional thin shell wrapper
+Makefile                # make build / play / showobj / clean
+Scripts/                # build.sh, showobj.sh, list-objects.sh
+Content/Objects/        # Prop asset folders (coffee_mug, milk_jug, …)
+Source/IdleCoffeeShop/Objects/  # C++ props + showroom
 legacy-web/             # Earlier HTML prototype (reference only)
 ```
+
+## Objects catalog
+
+Props live under `Content/Objects/<Category>/<id>/` with matching C++ classes
+in `Source/IdleCoffeeShop/Objects/`.
+
+| Id | Category |
+|----|----------|
+| `coffee_mug` | Kitchen |
+| `milk_jug` | Kitchen |
+| `espresso_cup` | Kitchen |
+| `latte_glass` | Kitchen |
+| `french_press` | Kitchen |
+| `pour_over` | Kitchen |
+| `sugar_jar` | Kitchen |
+| `tip_jar` | Counter |
+| `menu_stand` | Counter |
+| `pastry_plate` | Counter |
+| `grinder` | Equipment |
+| `espresso_machine` | Equipment |
+| `coffee_bag` | Ingredients |
+
+```bash
+make list-objects
+make showobj coffee_mug    # build + interactive showroom
+make showobj milk_jug
+```
+
+Showroom controls: **LMB** grab/release, **E** interact, **R** reset, **F** info, **WASD** + mouse look.
 
 ## Core gameplay (sample)
 
