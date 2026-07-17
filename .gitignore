@@ -1,0 +1,48 @@
+# Unreal Engine
+Binaries/
+DerivedDataCache/
+Intermediate/
+Saved/
+Build/
+.vs/
+.vscode/
+*.VC.db
+*.opensdf
+*.opendb
+*.sdf
+*.sln
+*.suo
+*.xcodeproj
+*.xcworkspace
+*.VC.opendb
+
+# macOS
+.DS_Store
+*.swp
+*~
+
+# Compiled
+*.o
+*.obj
+*.dll
+*.dylib
+*.exe
+*.pdb
+*.lib
+*.a
+
+# Rider / CLion
+.idea/
+*.DotSettings.user
+
+# Local packaging
+Dist/
+Packaged/
+*.ipa
+*.apk
+
+# Generated project files (regenerate with GenerateProjectFiles)
+*.xcworkspace/
+*.xcodeproj/
+CMakeFiles/
+cmake-build-*/
